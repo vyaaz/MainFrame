@@ -1,2 +1,2 @@
 # MainFrame
-AI to help you use AI
+Bridging the gap between intent and interpretation
