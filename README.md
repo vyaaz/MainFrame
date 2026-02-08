@@ -67,7 +67,76 @@ MainFrame uses RAG to enhance generated prompts with relevant best practices:
 - Scalability Considerations
 - Error Handling Patterns
 
+## Neural Network (Built from Scratch)
+
+MainFrame includes a **custom neural network built entirely from scratch using only NumPy** - no PyTorch, TensorFlow, or any ML framework.
+
+### What It Does
+
+Rates the quality of component descriptions (0-100%):
+
+| Description | Score | Verdict |
+|-------------|-------|---------|
+| `"login"` | 18% | ❌ Too vague |
+| `"user form"` | 23% | ❌ Needs detail |
+| `"validate email format"` | 45% | ⚠️ Okay |
+| `"user submits email and password through secure login form with validation"` | 89% | ✅ Excellent |
+
+### Architecture
+
+```
+Input Layer (208 neurons)
+      ↓ weights + bias
+Hidden Layer 1 (64 neurons, ReLU)
+      ↓ weights + bias
+Hidden Layer 2 (32 neurons, ReLU)
+      ↓ weights + bias
+Output Layer (1 neuron, Sigmoid) → Score 0-1
+```
+
+### Implemented From Scratch
+
+All neural network components are manually implemented in `backend/neural_network.py`:
+
+```python
+# Forward Pass
+Z1 = np.dot(X, W1) + b1      # Matrix multiplication
+A1 = np.maximum(0, Z1)        # ReLU activation
+output = 1 / (1 + np.exp(-Z3)) # Sigmoid activation
+
+# Backpropagation
+dW = (1/m) * np.dot(A.T, dZ)  # Gradient calculation
+W -= learning_rate * dW       # Weight update
+```
+
+### Key Components
+
+| Component | Implementation |
+|-----------|----------------|
+| **Forward Propagation** | Matrix multiply + activation functions |
+| **Backpropagation** | Chain rule for gradient calculation |
+| **Gradient Descent** | Weight updates with learning rate |
+| **Loss Function** | Binary cross-entropy |
+| **Tokenizer** | Bag-of-words + feature extraction |
+
+### Training
+
+- **Dataset**: 40 labeled examples (description → quality score)
+- **Epochs**: 2000 iterations
+- **Learning Rate**: 0.05
+- **Total Parameters**: ~15,000 weights
+
+### Why Build From Scratch?
+
+Demonstrates understanding of fundamental AI/ML concepts:
+- How neural networks learn through backpropagation
+- Matrix mathematics behind deep learning
+- Gradient descent optimization
+- No black-box dependencies
+
 ## Tech Stack
 
 - **Frontend**: React + Vite + TypeScript + ReactFlow + Tailwind CSS
 - **Backend**: FastAPI (Python) with RAG pipeline
+- **AI**: Google Gemini + OpenAI GPT-4o-mini
+- **Neural Network**: Custom implementation (NumPy only)
